@@ -1,4 +1,5 @@
-﻿using GestionHuacales.Api.DTO;
+﻿using GestionHuacales.Api.DAL;
+using GestionHuacales.Api.DTO;
 using GestionHuacales.Api.Models;
 using GestionHuacales.Api.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -20,9 +21,9 @@ public class EntradasHuacalesController (EntradasService entradasService) : Cont
 
     // GET api/<EntradasHuacalesController>/5
     [HttpGet("{id}")]
-    public string Get(int id)
+    public async Task Get(int id)
     {
-        return "value";
+        await entradasService.Listar(e => e.IdEntrada == id);
     }
 
     // POST api/<EntradasHuacalesController>
@@ -46,13 +47,27 @@ public class EntradasHuacalesController (EntradasService entradasService) : Cont
 
     // PUT api/<EntradasHuacalesController>/5
     [HttpPut("{id}")]
-    public void Put(int id, [FromBody] string value)
+    public async Task Put(int id, [FromBody] EntradasHuacalesDto entradaDto)
     {
+        var huacal = new EntradasHuacales
+        {
+            Fecha = DateTime.Now,
+            IdEntrada = id,
+            NombreCliente = entradaDto.NombreCliente,
+            EntradasHuacalesDetalles = entradaDto.EntradasHuacalesDetallesDto.Select(d => new EntradasHuacalesDetalle
+            {
+                TipoId = d.TipoId,
+                Cantidad = d.Cantidad,
+                Precio = d.Precio,
+            }).ToList()
+        };
+        await entradasService.Guardar (huacal);
     }
 
     // DELETE api/<EntradasHuacalesController>/5
     [HttpDelete("{id}")]
-    public void Delete(int id)
+    public async Task Delete(int id)
     {
+        await entradasService.Eliminar(id); 
     }
 }
