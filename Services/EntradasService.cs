@@ -103,9 +103,9 @@ public class EntradasService(IDbContextFactory<Contexto> DbFactory)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
         return await contexto.EntradasHuacales
-            .Include(e => e.EntradasHuacalesDetalles)
-                .ThenInclude(d => d.TiposHuacales)
-            .FirstOrDefaultAsync(e => e.IdEntrada == entradaId);
+           .Include(e => e.EntradasHuacalesDetalles)
+               .ThenInclude(d => d.TiposHuacales)
+           .FirstOrDefaultAsync(e => e.IdEntrada == entradaId);
     }
 
     public async Task<bool> Eliminar(int entradaId)
@@ -133,16 +133,18 @@ public class EntradasService(IDbContextFactory<Contexto> DbFactory)
             .Select(e => new EntradasHuacalesDto
             {
                 NombreCliente = e.NombreCliente,
-            })
-            .ToArrayAsync();
+            }).ToArrayAsync();
     }
 
-    public async Task<List<TiposHuacales>> ListarTiposHuacales()
+    public async Task<TiposHuacalesDto[]> ListarTiposHuacales(Expression<Func<TiposHuacales, bool>> criterio)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
-        return await contexto.TiposHuacales
-            .AsNoTracking()
-            .ToListAsync();
+        return await contexto.TiposHuacales.Where(criterio).Select(t => new TiposHuacalesDto
+        {
+            TipoId = t.TipoId,
+            Descripcion = t.Descripcion,
+            Existencia = t.Existencia
+        }).ToArrayAsync();
     }
 
     public enum TipoOperacion
