@@ -19,16 +19,17 @@ builder.Services.AddDbContextFactory<Contexto>(o => o.UseSqlite(ConnectionString
 
 //Inyeccion del service
 builder.Services.AddScoped<EntradasService>();
+builder.Services.AddScoped<TipoService>();
 
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-    app.MapOpenApi();
-}
+//if (app.Environment.IsDevelopment())
+//{
+app.UseSwagger();
+app.UseSwaggerUI();
+app.MapOpenApi();
+//}
 
 app.UseHttpsRedirection();
 
