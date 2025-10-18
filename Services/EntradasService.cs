@@ -128,12 +128,24 @@ public class EntradasService(IDbContextFactory<Contexto> DbFactory)
     public async Task<EntradasHuacalesDto[]> Listar(Expression<Func<EntradasHuacales, bool>> criterio)
     {
         await using var contexto = await DbFactory.CreateDbContextAsync();
+
         return await contexto.EntradasHuacales
+            .Include(e => e.EntradasHuacalesDetalles)
+                .ThenInclude(d => d.TiposHuacales)
             .Where(criterio)
             .Select(e => new EntradasHuacalesDto
             {
                 NombreCliente = e.NombreCliente,
-            }).ToArrayAsync();
+                EntradasHuacalesDetallesDto = e.EntradasHuacalesDetalles
+                    .Select(d => new EntradasHuacalesDetallesDto
+                    {
+                        TipoId = d.TipoId,
+                        Cantidad = d.Cantidad,
+                        Precio = d.Precio,
+                    })
+                    .ToArray()
+            })
+            .ToArrayAsync();
     }
 
     public enum TipoOperacion
