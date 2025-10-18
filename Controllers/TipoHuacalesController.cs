@@ -31,23 +31,4 @@ public class TipoHuacalesController (TipoService tiposService) : ControllerBase
 
         return Ok(tipos.First());
     }
-
-    // PUT api/<TipoHuacalesController>/5
-    [HttpPut("{id}")]
-    public async Task Put(int id, [FromBody] TiposHuacalesDto tipoDto)
-    {
-        var tipo = new TiposHuacales
-        {
-            Descripcion = tipoDto.Descripcion,
-        };
-
-        await tiposService.Guardar(tipo);
-    }
-
-    // DELETE api/<TipoHuacalesController>/5
-    [HttpDelete("{id}")]
-    public async Task Delete(int id)
-    {
-        await tiposService.Eliminar(id);
-    }
 }
