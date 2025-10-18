@@ -27,7 +27,7 @@ public class EntradasHuacalesController (EntradasService entradasService) : Cont
 
         if (entrada == null)
         {
-            return NotFound($"No se encontró una entrada con el ID {id}");
+            return NotFound($"Entrada huacal no encontrada: {id}");
         }
 
         var dto = new EntradasHuacalesDto
@@ -39,8 +39,7 @@ public class EntradasHuacalesController (EntradasService entradasService) : Cont
                     TipoId = d.TipoId,
                     Cantidad = d.Cantidad,
                     Precio = d.Precio,
-                })
-                .ToArray()
+                }).ToArray()
         };
 
         return Ok(dto);
