@@ -26,7 +26,7 @@ public class TipoHuacalesController (EntradasService entradasService) : Controll
 
         if (tipos == null || tipos.Length == 0)
         {
-            return NotFound($"No se encontró ningún tipo de huacal con el ID {id}");
+            return NotFound($"Tipo huacal no encontrado: {id}");
         }
 
         return Ok(tipos.First());
