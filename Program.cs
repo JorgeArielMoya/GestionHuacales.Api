@@ -19,7 +19,6 @@ builder.Services.AddDbContextFactory<Contexto>(o => o.UseSqlite(ConnectionString
 
 //Inyeccion del service
 builder.Services.AddScoped<EntradasService>();
-builder.Services.AddScoped<TipoService>();
 
 var app = builder.Build();
 

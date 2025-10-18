@@ -147,6 +147,16 @@ public class EntradasService(IDbContextFactory<Contexto> DbFactory)
             })
             .ToArrayAsync();
     }
+    public async Task<TiposHuacalesDto[]> ListarTiposHuacales(Expression<Func<TiposHuacales, bool>> criterio)
+    {
+        await using var contexto = await DbFactory.CreateDbContextAsync();
+        return await contexto.TiposHuacales.Where(criterio).Select(t => new TiposHuacalesDto
+        {
+            TipoId = t.TipoId,
+            Descripcion = t.Descripcion,
+            Existencia = t.Existencia
+        }).ToArrayAsync();
+    }
 
     public enum TipoOperacion
     {

@@ -9,20 +9,20 @@ namespace GestionHuacales.Api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class TipoHuacalesController (TipoService tiposService) : ControllerBase
+public class TipoHuacalesController (EntradasService entradasService) : ControllerBase
 {
     // GET: api/<TipoHuacalesController>
     [HttpGet]
     public async Task <TiposHuacalesDto[]> Get()
     {
-        return await tiposService.ListarTiposHuacales(t => true); 
+        return await entradasService.ListarTiposHuacales(t => true); 
     }
 
     // GET api/<TipoHuacalesController>/5
     [HttpGet("{id}")]
     public async Task<ActionResult<TiposHuacalesDto>> Get(int id)
     {
-        var tipos = await tiposService.ListarTiposHuacales(e => e.TipoId == id);
+        var tipos = await entradasService.ListarTiposHuacales(e => e.TipoId == id);
 
         if (tipos == null || tipos.Length == 0)
         {
