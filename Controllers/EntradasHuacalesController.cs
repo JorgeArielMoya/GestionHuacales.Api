@@ -21,9 +21,29 @@ public class EntradasHuacalesController (EntradasService entradasService) : Cont
 
     // GET api/<EntradasHuacalesController>/5
     [HttpGet("{id}")]
-    public async Task Get(int id)
+    public async Task<ActionResult<EntradasHuacalesDto>> Get(int id)
     {
-        await entradasService.Listar(e => e.IdEntrada == id);
+        var entrada = await entradasService.Buscar(id);
+
+        if (entrada == null)
+        {
+            return NotFound($"No se encontró una entrada con el ID {id}");
+        }
+
+        var dto = new EntradasHuacalesDto
+        {
+            NombreCliente = entrada.NombreCliente,
+            EntradasHuacalesDetallesDto = entrada.EntradasHuacalesDetalles
+                .Select(d => new EntradasHuacalesDetallesDto
+                {
+                    TipoId = d.TipoId,
+                    Cantidad = d.Cantidad,
+                    Precio = d.Precio,
+                })
+                .ToArray()
+        };
+
+        return Ok(dto);
     }
 
     // POST api/<EntradasHuacalesController>
@@ -59,7 +79,7 @@ public class EntradasHuacalesController (EntradasService entradasService) : Cont
                 TipoId = d.TipoId,
                 Cantidad = d.Cantidad,
                 Precio = d.Precio,
-            }).ToList()
+            }).ToArray()
         };
         await entradasService.Guardar (huacal);
     }
