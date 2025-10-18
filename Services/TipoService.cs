@@ -27,13 +27,13 @@ public class TipoService(IDbContextFactory<Contexto> DbFactory)
             .AnyAsync(t => t.TipoId == tipoId);  
     }
 
-    public async Task<bool> Insertar (TiposHuacales tipoHuacal)
+    private async Task<bool> Insertar (TiposHuacales tipoHuacal)
     {
         await using var Contexto = await DbFactory.CreateDbContextAsync();
         Contexto.TiposHuacales.Add (tipoHuacal);
         return await Contexto.SaveChangesAsync() > 0;
     }
-    public async Task<bool> Modificar (TiposHuacales tipoHuacal)
+    private async Task<bool> Modificar (TiposHuacales tipoHuacal)
     {
         await using var Contexto = await DbFactory.CreateDbContextAsync();
         Contexto.Update(tipoHuacal);
