@@ -20,9 +20,16 @@ public class TipoHuacalesController (TipoService tiposService) : ControllerBase
 
     // GET api/<TipoHuacalesController>/5
     [HttpGet("{id}")]
-    public async Task Get(int id)
+    public async Task<ActionResult<TiposHuacalesDto>> Get(int id)
     {
-        await tiposService.ListarTiposHuacales(e => e.TipoId == id);
+        var tipos = await tiposService.ListarTiposHuacales(e => e.TipoId == id);
+
+        if (tipos == null || tipos.Length == 0)
+        {
+            return NotFound($"No se encontró ningún tipo de huacal con el ID {id}");
+        }
+
+        return Ok(tipos.First());
     }
 
     // PUT api/<TipoHuacalesController>/5
